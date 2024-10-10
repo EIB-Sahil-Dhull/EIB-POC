@@ -1,0 +1,232 @@
+<div>
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container-fluid">
+     
+      <div> <a class="navbar-brand text-white" href="#">User Management</a></div>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link cursor-pointer text-white" (click)="showUserList()" [class.active]="isUserListVisible"
+              aria-current="page">User List</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link cursor-pointer text-white" (click)="showAddUserForm()"
+              [class.active]="isAddUserVisible"><i class="fa-solid fa-user"></i> Add New User</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div *ngIf="isUserListVisible" class="">
+    <h3 style="padding: 10px 15px;">User List</h3>
+    <table class="table table-striped mt-0">
+      <thead>
+        <tr>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Email</th>
+          <th>Created Date</th>
+          <th>Phone Number</th> 
+          <th>Address</th> 
+          <th>Date of Birth</th> 
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users$ | async">
+          <td>{{ user.firstName }}</td>
+          <td>{{ user.lastName }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.createdDate }}</td> 
+          <td>{{ user.phoneNumber }}</td>
+          <td>{{ user.address }}</td> 
+          <td>{{ user.dateOfBirth }}</td> 
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="isAddUserVisible">
+    <h3 style="padding: 10px 15px;">Add New User</h3>
+    <form (ngSubmit)="onSubmit()" #userForm="ngForm" class="  align-items-center">
+
+      <div class="container-fluid">
+
+        <div class="row">
+        
+          <div class="form-group  col-4 ">
+            <label for="firstName">First Name:</label>
+            <input id="firstName" 
+       [(ngModel)]="newUser.firstName" 
+       (ngModelChange)="newUser.firstName = newUser.firstName.trim()" 
+       name="firstName" 
+       required 
+       #firstName="ngModel"
+       class="form-control w-100 " 
+       pattern="^(?!\s*$).+" />
+<div class="validation-message" *ngIf="firstName.invalid && firstName.touched">
+    First name is required.
+</div>
+
+          </div>
+
+          <!-- Last Name Field -->
+          <div class="form-group col-4">
+            <label for="lastName">Last Name:</label>
+            <input id="lastName" 
+            [(ngModel)]="newUser.lastName" 
+            (ngModelChange)="newUser.lastName = newUser.lastName.trim()" 
+            name="lastName" 
+            required 
+            #lastName="ngModel"
+            class="form-control w-100" 
+            pattern="^(?!\s*$).+" />
+     <div class="validation-message" *ngIf="lastName.invalid && lastName.touched">
+         Last name is required.
+     </div>
+          </div>
+
+          <!-- Email Field -->
+          <div class="form-group col-4">
+            <label for="email">Email:</label>
+            <input
+              id="email"
+              [(ngModel)]="newUser.email"
+              (ngModelChange)="newUser.email = $event.trim()" 
+              name="email"
+              
+              required
+              #emailInput="ngModel"
+              class="form-control w-100"
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+            />
+            <div class="validation-message" *ngIf="emailInput.invalid && emailInput.touched">
+              <span *ngIf="emailInput.errors?.['required']">Email is required.</span>
+              <span *ngIf="emailInput.errors?.['pattern']">Enter a valid email address.</span>
+            </div>
+          </div>
+          
+          
+
+          <!-- Phone Number Field -->
+          <div class="form-group col-4">
+            <label for="phoneNumber">Phone Number:</label>
+            <input
+              id="phoneNumber"
+              [(ngModel)]="newUser.phoneNumber"
+              (ngModelChange)="newUser.phoneNumber = newUser.phoneNumber.trim()"
+              name="phoneNumber"
+              required
+              #phoneNumber="ngModel"
+              class="form-control w-100"
+              pattern="^\d{10}$" 
+              type="tel" 
+              maxlength="10"
+              (keypress)="onlyAllowNumbers($event)"
+            />
+            <div class="validation-message" *ngIf="phoneNumber.invalid && phoneNumber.touched">
+              <span *ngIf="phoneNumber.errors?.['required']">Phone number is required.</span>
+              <span *ngIf="phoneNumber.errors?.['pattern']">Phone number must be 10 digits.</span>
+            </div>
+          </div>
+          
+          
+          <!-- Address Field -->
+          <div class="form-group  col-4">
+            <label for="address">Address:</label>
+            <input id="address" 
+            [(ngModel)]="newUser.address" 
+            (ngModelChange)="newUser.address = newUser.address.trim()" 
+            name="address" 
+            required 
+            #address="ngModel"
+            class="form-control w-100" 
+            pattern="^(?!\s*$).+" />
+     <div class="validation-message" *ngIf="address.invalid && address.touched">
+         Address is required.
+     </div>
+          </div>
+
+          
+          <div class="form-group col-4">
+            <label for="dateOfBirth">Date of Birth:</label>
+            <input 
+    id="dateOfBirth" 
+    type="date" 
+    [(ngModel)]="newUser.dateOfBirth" 
+    name="dateOfBirth" 
+    required
+    #dateOfBirth="ngModel" 
+    class="form-control w-100" 
+    [max]="today" 
+    (keydown)="preventTyping($event)" 
+    
+/>
+
+
+<div class="validation-message" *ngIf="dateOfBirth.invalid && dateOfBirth.touched">
+  Date of birth is required.
+</div>
+
+          </div>
+          
+        </div>
+      
+        <div class="form-check mt-3 p-0">
+          <input type="checkbox" id="consent" [(ngModel)]="newUser.consent" name="consent" class="w-3 "
+            [disabled]="!isGdprLinkClicked" required #consent="ngModel" />
+          <label class="form-check-label" for="consent">
+            I hereby declare that you can use my personal information
+            <a href="#" (click)="onGdprLinkClick()" data-bs-toggle="modal" data-bs-target="#gdprModal">
+              according to GDPR policy
+            </a>
+          </label>
+        </div>
+        <div *ngIf="consent.invalid && consent.touched" class="text-danger">
+          You must provide consent to proceed.
+        </div>
+  
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary ms-2" [disabled]="userForm.invalid">
+          Add User
+        </button>
+      </div>
+      <!-- Consent Checkbox -->
+      
+    </form>
+  </div>
+
+
+  <div class="modal fade" id="gdprModal" tabindex="-1" aria-labelledby="gdprModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="gdprModalLabel">GDPR Privacy Policy </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+
+          <p>
+            At User Management, we are committed to protecting your personal data and respecting your privacy. This GDPR
+            Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our
+            website, and use our services. By accessing or using our website, you agree to the terms of this Privacy
+            Policy.
+          </p>
+          <p>
+            If you have any questions or concerns about our policy or practices regarding your personal information,
+            please contact us at abc&#64;gmail.com.
+          </p>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
