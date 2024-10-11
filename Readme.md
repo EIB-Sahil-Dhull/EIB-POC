@@ -65,14 +65,6 @@ Binary_String_Analysis:
 The Binary_String_Analysis program is located in the program.cs file within the gdprApp directory. 
 This console application is designed to analyze binary strings and determine whether they are classified as "Good Strings" or "Not a Good Strings."
 
-Key Features:
-
-Validation of Binary Strings: The program ensures that the input string only contains '0's and '1's. Any string containing other characters is considered "Not a Good String."
-String Evaluation: It tracks the count of '0's and '1's while traversing the string. If at any point, the number of '0's exceeds the number of '1's, the string is labeled as "Not a Good String."
-Result: A final comparison of counts determines if the string is "Good" (equal count of '0's and '1's) or "Not a Good String."
-
-Runs a series of predefined test cases to validate the binary string function.
-Compares the output of the program with expected values and displays the results.
 Frontend Overview (Angular)
 Angular 18 (Standalone) Overview
 The frontend of the GDPR project is built as a standalone Angular application. It uses the Angular CLI for development and building, and Angular Redux to manage state. This ensures efficient data management and predictable state transitions across components.
